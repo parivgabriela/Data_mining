@@ -1,12 +1,40 @@
-# Análisis de Puntualidad y Cancelaciones: Aerolínea Flybondi
+# Dataminig
+Bienvenido a mi repositorio de Minería de Datos. Aquí almaceno proyectos enfocados en la extracción de conocimiento, limpieza de datos complejos (ETL), ingeniería de variables y análisis predictivo.
 
-## Contexto
+## De que trata
 
-La idea de este proyecto parte de la necesidad de implementar varias áreas de ciencias de datos que fue aprendiendo. 
+Este repositorio guardará proyectos de datamining. El proceso consta de varias etapas, primero la recolección de datos utilizando web scrapping, luego se procesarán los datos para la etapa siguiente. El siguiente paso es el EDA, donde se arma el reporte para ver como estan los datos, encontrar patrones, tendencias, para un futuro modelado. El último paso es de modelado para realizar modelos de predicción.
 
-El motivo de elegir el tema viene luego de comprar mi pasaje áereo en la empresa a analizar y ver una noticia en la que se le adjudica que tiene un mala reputación sobre las cancelaciones de vuelos en temporada alta.
-Vamos a proceder con el analísis sobre los vuelos cancelados cuando tiene mayor cantidad de cancelaciones respecto a la proporción. Con este proyecto quiero repasar los temas de web scrapping, data cleaning y EDA, para luego proceder a realizar reportes visuales.
+## Proyectos destacados
 
-## Hipótesis
 
-Se postula que la tasa de cancelación tiene una correlación positiva con el volumen de demanda estacional.
+
+## Estructura del Repositorio
+Para mantener el orden de Senior, cada proyecto sigue esta jerarquía:
+```
+├── 01_Analisis_Vuelos/
+│   ├── data/               # Archivos CSV (o links a fuentes)
+│   ├── notebooks/          # Google Colab / Jupyter Notebooks
+│   ├── src/                # Funciones auxiliares (.py)
+│   └── README.md           # Detalle específico del proyecto
+├── 02_Proyecto_Ejemplo/
+│   └── ...
+├── .gitignore              # Para evitar subir archivos pesados (.csv, .env)
+└── README.md               # Este archivo
+```
+## Instalación y Uso
+Si querés replicar estos análisis localmente:
+
+## Metodología de Trabajo
+En cada proyecto aplico el proceso CRISP-DM:
+
+1. Comprensión del Negocio: ¿Qué impacto tiene un vuelo cancelado?
+2. Comprensión de los Datos: Análisis exploratorio (EDA) y calidad de datos.
+3. Preparación de Datos: Limpieza con Regex, manejo de Outliers y NaNs.
+4. Modelado/Visualización: Reportes interactivos y búsqueda de tendencias.
+
+## Contacto
+¿Tenés alguna duda sobre los modelos o las transformaciones?
+
+LinkedIn: [/parivgabriela](linkedin.com/in/parivgabriela)
+
