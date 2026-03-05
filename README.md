@@ -1,4 +1,4 @@
-# Dataminig
+# Datamining
 Bienvenido a mi repositorio de Minería de Datos. Aquí almaceno proyectos enfocados en la extracción de conocimiento, limpieza de datos complejos (ETL), ingeniería de variables y análisis predictivo.
 
 ## De que trata
