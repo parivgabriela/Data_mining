@@ -20,7 +20,7 @@ Se postula que la tasa de cancelación tiene una correlación positiva con el vo
 ## Notebooks
 [**Scraping y extracción**](notebooks/01_scraping_y_extraccion.ipynb): Para la extracción de datos de los vuelos se utilizó la página https://failbondi.fail/ para esta operación se tomo en cuenta el uso excesivo de las peticiones y evitar el bloqueo, asi también el guardado de datos progresivo para ir guardando la información mes a mes. Explicación del proyecto:
 
-[![YouTube](https://img.shields.io/badge/-YouTube-red?style=flat&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=LvM2nSIZkHk)
+[![YouTube](https://img.shields.io/badge/-YouTube-red?style=flat&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=gWwsnjePJjo)
 
 ### Tecnologías Utilizadas
 - Pandas
