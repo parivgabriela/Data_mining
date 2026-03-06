@@ -1,40 +1,85 @@
+# #english
+
+# Punctuality and Cancellation Analysis: Flybondi vs. Jetsmart
+
+## Context
+This project stems from the need to integrate and apply various Data Science disciplines. 
+
+The inspiration came after purchasing a flight from one of the analyzed companies and encountering news reports regarding their reputation for high cancellation rates during peak seasons. 
+The analysis focuses on flight cancellations, identifying periods with the highest cancellation-to-flight ratios.
+
+The goal is to demonstrate proficiency in **Web Scraping**, **Data Cleaning (Wrangling)**, and **EDA**, followed by the generation of data-driven visual reports. Both companies are Argentine low-cost carriers that compete in the same price segment with a "base fare + add-ons" business model.
+
+## Hypothesis
+It is postulated that the cancellation rate has a positive correlation with seasonal demand volume.
+
+## Notebooks
+
+### 1. [Scraping and Extraction](notebooks/01_scraping_y_extraccion.ipynb)
+Data was extracted from [failbondi.fail](https://failbondi.fail/). This process was designed to handle request throttling and avoid IP blocking, implementing a progressive storage strategy to save information month-by-month.
+
+**Project Walkthrough:**
+[![YouTube](https://img.shields.io/badge/-YouTube-red?style=flat&logo=youtube&logoColor=white)](https://youtu.be/fiamnXitfxI)
+
+**Tech Stack:**
+* Pandas
+* BeautifulSoup
+
+### 2. [Cleaning and Transformation](notebooks/02_limpieza_transformacion.ipynb)
+In this stage, raw data is processed. Key features are extracted from the "Departure Delay" column to determine total delay time, flight status, and delay levels. The output is a consolidated **Parquet** file containing cleaned data from both airlines.
+
+**Tech Stack:**
+* Pandas
+* RegEx (Regular Expressions)
+
+### 3. [EDA Report](notebooks/03_EDA_reporte.ipynb)
+Exploratory analysis to uncover patterns, seasonal trends, and comparative performance between both carriers.
+
+**Tech Stack:**
+* Pandas
+* Matplotlib
+* Seaborn
+
+---
+
+# #spanish
 
 # Análisis de Puntualidad y Cancelaciones: Aerolínea Flybondi y Jetsmart
 
 ## Contexto
-
 La idea de este proyecto parte de la necesidad de implementar varias áreas de ciencias de datos que fui aprendiendo. 
 
-El motivo de elegir el tema viene luego de comprar mi pasaje áereo de una de las empresas analizadas y ver una noticia en la que se le adjudica que tiene un mala reputación sobre las cancelaciones de vuelos en temporada alta.
-Vamos a proceder con el analísis sobre los vuelos cancelados, cuando tiene mayor cantidad de cancelaciones respecto a la proporción de vuelos. 
+El motivo de elegir el tema viene luego de comprar mi pasaje áereo de una de las empresas analizadas y ver una noticia en la que se le adjudica una mala reputación sobre las cancelaciones de vuelos en temporada alta. 
+Procederemos con el análisis sobre los vuelos cancelados, identificando cuándo tienen mayor cantidad de cancelaciones respecto a la proporción de vuelos.
 
-El objetivo con este proyecto quiero repasar los temas de web scrapping, data cleaning y EDA, para luego proceder a realizar reportes visuales.
-
-Se utilizaran los datos de dos empresas low cost que tienen como finalidad vender los boletos en tarifa base y luego para cada cosa cobran como adicional. Dentro del mercado argentino se manejan dentro de la misma gama de precios.
+El objetivo de este proyecto es repasar los temas de **Web Scraping**, **Data Cleaning** y **EDA**, para luego proceder a realizar reportes visuales. Se utilizan datos de dos empresas low-cost del mercado argentino que compiten en la misma gama de precios.
 
 ## Hipótesis
-
 Se postula que la tasa de cancelación tiene una correlación positiva con el volumen de demanda estacional.
 
-
 ## Notebooks
-[**Scraping y extracción**](notebooks/01_scraping_y_extraccion.ipynb): Para la extracción de datos de los vuelos se utilizó la página https://failbondi.fail/ para esta operación se tomo en cuenta el uso excesivo de las peticiones y evitar el bloqueo, asi también el guardado de datos progresivo para ir guardando la información mes a mes. Explicación del proyecto:
 
+### 1. [Scraping y extracción](notebooks/01_scraping_y_extraccion.ipynb)
+Para la extracción de datos se utilizó la página [failbondi.fail](https://failbondi.fail/). Se tomó en cuenta el uso de peticiones controladas para evitar bloqueos y se implementó un guardado de datos progresivo mes a mes.
+
+**Explicación del proyecto:**
 [![YouTube](https://img.shields.io/badge/-YouTube-red?style=flat&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=gWwsnjePJjo)
 
-### Tecnologías Utilizadas
-- Pandas
-- BeautifulSoup
+**Tecnologías Utilizadas:**
+* Pandas
+* BeautifulSoup
 
-[**Limpieza y transformación**](notebooks/02_limpieza_transformacion.ipynb): Se analizan los datos obtenidos en el paso anterior, y se extrae data extra que hay en la columna de "Demora en despegar", donde podemos encontrar el tiempo de demora total de un vuelo o si se cancelo, así definir un nivel de demora, o el estado del vuelo. Al finalizar este notebook se obtiene un archivo parquet con todos los datos de ambas enpresas en un solo archivo.
+### 2. [Limpieza y transformación](notebooks/02_limpieza_transformacion.ipynb)
+Se analizan los datos obtenidos y se extrae información de la columna "Demora en despegar", definiendo el tiempo de demora total, el estado del vuelo y niveles de demora. Al finalizar, se obtiene un archivo **Parquet** unificado con los datos de ambas empresas.
 
-### Tecnologías Utilizadas
-- Pandas
-- RegEx
+**Tecnologías Utilizadas:**
+* Pandas
+* RegEx
 
-[**Reporte EDA**](notebooks/03_EDA_reporte.ipynb):
+### 3. [Reporte EDA](notebooks/03_EDA_reporte.ipynb)
+Análisis exploratorio para descubrir patrones, tendencias estacionales y rendimiento comparativo entre las aerolíneas.
 
-### Tecnologías Utilizadas
-- Pandas
-- Matplot
-- Seaborn
+**Tecnologías Utilizadas:**
+* Pandas
+* Matplotlib
+* Seaborn
