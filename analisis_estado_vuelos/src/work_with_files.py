@@ -7,27 +7,27 @@ YEAR = 2025
 def read_csv_file(filename):
     return pd.read_csv(filename)
 
-def load_data(ruta_archivo, **kwargs):
+
+def load_data(file_path, **kwargs):
     """
-    Carga un archivo CSV o Parquet y devuelve un DataFrame de Pandas.
-    :param ruta_archivo: str, camino al archivo.
-    :param kwargs: Argumentos adicionales para pd.read_csv o pd.read_parquet.
+    Load a CSV file or Parquet and return a DataFrame of Pandas.
+    :param file_path: str, path to file.
+    :param kwargs: Adicional pd.read_csv o pd.read_parquet.
     :return: pd.DataFrame
     """
-    # Extraemos la extensión del archivo
-    _, extension = os.path.splitext(ruta_archivo)
-    extension = extension.lower()
+    _, extension_file = os.path.splitext(file_path)
+    extension_file = extension_file.lower()
 
     try:
-        if extension == '.csv':
-            return pd.read_csv(ruta_archivo, **kwargs)
-        elif extension == '.parquet':
-            return pd.read_parquet(ruta_archivo, **kwargs)
+        if extension_file == '.csv':
+            return pd.read_csv(file_path, **kwargs)
+        elif extension_file == '.parquet':
+            return pd.read_parquet(file_path, **kwargs)
         else:
-            raise ValueError(f"Formato no soportado: {extension}. Solo CSV o Parquet.")
+            raise ValueError(f"unsupported format: {extension_file}. Use CSV or Parquet.")
 
     except Exception as e:
-        print(f"Error al cargar el archivo: {e}")
+        print(f"Error loading file: {e}")
         return None
 
 def export_and_unify_files(folder_path, company, format="parquet", prefijo=None):
