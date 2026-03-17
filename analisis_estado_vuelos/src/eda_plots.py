@@ -14,6 +14,112 @@ fixed_colors = {
     'Flybondi': '#fdbe15'  # Amarillo
 }
 
+ordered_months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+ordered_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+color_g = "#fc7753"
+paleta = ["#fc7753", "#66d7d1", "#C45BAA"]
+
+labels_cancelado = ["No Cancelado", "Cancelado"]
+
+def plot_frequencies(df: pd.DataFrame, freq_column: str, category: str = None, title: str = None, color: str = "green",
+                     sort_by_index: bool = False, show_mean: bool = False, fixed_colors: dict = None) -> None:
+    """
+    Generates a bar chart with an optional mean frequency line.
+
+    Parameters
+    ----------
+    df           : Input DataFrame.
+    freq_column  : Column to count on the X axis.
+    category     : Optional column for hue grouping.
+    title        : Chart title. Auto-generated if None.
+    color        : Bar color when no category is used.
+    sort_by_index: If True, sorts X axis by value instead of frequency.
+    show_mean    : If True, draws a horizontal mean line.
+    fixed_colors : Dict of fixed colors per category value.
+    """
+    df_plot = df.copy()
+
+    if category:
+        df_plot["empresa"] = df_plot["empresa"].map(name_mapping).fillna(df_plot["empresa"])
+
+    # 1. X-axis order
+    order = (
+        sorted(df_plot[freq_column].unique()) if sort_by_index else df_plot[freq_column].value_counts().index.astype(str)
+    )
+
+    # 2. Build chart
+    plt.figure(figsize=(10, 6))
+
+    if category:
+        ax = sns.countplot(data=df_plot, x=freq_column, hue=category, order=order, palette=fixed_colors)
+        plt.legend(title=category, bbox_to_anchor=(1.05, 1), loc="upper left")
+    else:
+        ax = sns.countplot(data=df_plot, x=freq_column, order=order, color=color)
+
+    # 3. Mean line
+    if show_mean:
+        counts = df_plot[freq_column].value_counts()
+        mean_val = counts.mean()
+        plt.axhline(mean_val, color="red", linestyle="--", linewidth=2, label=f"Mean: {mean_val:.1f}")
+        plt.legend(bbox_to_anchor=(1.05, 1), loc="upper left")
+
+    # 4. Style
+    auto_title = f"Distribution of {freq_column}" + (f" by {category}" if category else "")
+    plt.title(title or auto_title, fontsize=14)
+    plt.xlabel(freq_column, fontsize=12)
+    plt.ylabel("Record Count", fontsize=12)
+    plt.xticks(rotation=45)
+    plt.grid(axis="y", linestyle="--", alpha=0.3)
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_evolution(
+    df: pd.DataFrame, x: str, y: str, category: str = None, estimator: str = "mean", title: str = None,
+    fixed_colors: dict = None) -> None:
+    """
+    Plots the evolution of a metric over time or an ordered axis.
+
+    Parameters
+    ----------
+    df          : Input DataFrame.
+    x           : Column for the X axis.
+    y           : Column for the Y axis (metric).
+    category    : Optional column for hue grouping.
+    estimator   : Aggregation function ('mean', 'sum', 'median').
+    title       : Chart title. Auto-generated if None.
+    fixed_colors: Dict of fixed colors per category value.
+    """
+    df_plot = df.copy()
+
+    if category:
+        df_plot[category] = df_plot[category].map(name_mapping).fillna(df_plot[category])
+
+    label_y = y.replace("_", " ").title()
+    label_x = x.replace("_", " ").title()
+
+    plt.figure(figsize=(12, 5))
+    sns.set_theme(style="whitegrid")
+
+    sns.lineplot(
+        data=df_plot, x=x, y=y, hue=category, estimator=estimator, marker="o", linewidth=2.5,
+        errorbar=None, palette=fixed_colors if category else None
+    )
+
+    plt.title(title or f"{label_y} by {label_x}", fontsize=15, pad=20)
+    plt.xlabel(label_x, fontsize=12)
+    plt.ylabel(f"{estimator.capitalize()} of {label_y}", fontsize=12)
+
+    if category:
+        plt.legend(title=category.replace("_", " ").title(), bbox_to_anchor=(1.05, 1), loc="upper left")
+
+    if df_plot[x].dtype in ["int64", "int32"]:
+        plt.xticks(sorted(df_plot[x].unique()))
+
+    plt.tight_layout()
+    plt.show()
+
 def show_custom_pie(df: pd.DataFrame, column_name: str, labels: list = None, title: str = None, colors: list = None ) -> None:
     """
     Renders a pie chart for a categorical column.
@@ -48,12 +154,8 @@ def show_custom_pie(df: pd.DataFrame, column_name: str, labels: list = None, tit
     plt.show()
 
 
-# ---------------------------------------------------------------------------
-# Temporal delay impact
-# ---------------------------------------------------------------------------
-
-def plot_temporal_impact(df: pd.DataFrame, category: str = None, unit: str = "days", show_labels: bool = False, 
-                         name_mapping: dict = None, fixed_colors: dict = None) -> None:
+def plot_temporal_impact(df: pd.DataFrame, category: str = None, unit: str = "days", show_labels: bool = False,
+                         fixed_colors: dict = None) -> None:
     """
     Compares total delay impact per month and company.
 
@@ -64,7 +166,6 @@ def plot_temporal_impact(df: pd.DataFrame, category: str = None, unit: str = "da
     category     : Optional column used for hue grouping.
     unit         : One of 'minutes', 'hours', 'days'.
     show_labels  : If True, renders data labels on top of each bar.
-    name_mapping : Dict to remap company/category display names.
     fixed_colors : Dict of fixed colors per category value.
     """
     unit_config = {
@@ -81,17 +182,25 @@ def plot_temporal_impact(df: pd.DataFrame, category: str = None, unit: str = "da
     fmt      = unit_config[unit]["fmt"]
 
     df_plot = df.copy()
-    if category and name_mapping:
-        df_plot[category] = df_plot[category].map(name_mapping).fillna(df_plot[category])
+    
+    target_col = category if category else "empresa"
+    
+    if target_col:
+        df_plot[target_col] = df_plot[target_col].map(name_mapping).fillna(df_plot[target_col])
 
-    df_grouped = (df_plot.groupby(["mes", "empresa"])["minutos_netos_demora"].sum().reset_index())
+    df_grouped = (df_plot.groupby(["mes", target_col])["minutos_netos_demora"].sum().reset_index())
     df_grouped["converted_value"] = df_grouped["minutos_netos_demora"] / divisor
 
     plt.figure(figsize=(14, 7))
     sns.set_theme(style="whitegrid")
 
-    ax = sns.barplot(data=df_grouped, x="mes", y="converted_value", hue="empresa", 
-                     palette=fixed_colors if category else None)
+    ax = sns.barplot(
+        data=df_grouped, 
+        x="mes", 
+        y="converted_value", 
+        hue=target_col,
+        palette=fixed_colors if fixed_colors else None
+    )
 
     if show_labels:
         for container in ax.containers:
@@ -104,11 +213,6 @@ def plot_temporal_impact(df: pd.DataFrame, category: str = None, unit: str = "da
     plt.margins(y=0.15)
     plt.tight_layout()
     plt.show()
-
-
-# ---------------------------------------------------------------------------
-# Cancellations by month (line — single month)
-# ---------------------------------------------------------------------------
 
 def plot_cancellations_month(df: pd.DataFrame, month: int) -> None:
     """
@@ -135,77 +239,3 @@ def plot_cancellations_month(df: pd.DataFrame, month: int) -> None:
     plt.tight_layout()
     plt.show()
 
-
-# ---------------------------------------------------------------------------
-# Cancellations overview (annual or filtered by month)
-# ---------------------------------------------------------------------------
-
-def plot_cancellations(df: pd.DataFrame, color: str = "steelblue", by_company: bool = False, month: int = None,
-    fixed_colors: dict = None) -> None:
-
-    df_plot = df.copy()
-    df_plot["fecha"] = pd.to_datetime(df_plot["fecha"])
-
-    if by_company:
-        df_plot["empresa"] = df_plot["empresa"].map(name_mapping).fillna(df_plot["empresa"])
-
-    # Optional month filter
-    if month:
-        df_plot = df_plot[df_plot["fecha"].dt.month == month]
-        month_name = df_plot["fecha"].dt.month_name().iloc[0] if not df_plot.empty else ""
-        title_extra = f" — Month: {month_name}"
-    else:
-        title_extra = " — Annual"
-
-    group_cols = ["fecha", "empresa"] if by_company else ["fecha"]
-    data_grouped = df_plot.groupby(group_cols)["is_cancelled"].sum().reset_index()
-
-    plt.figure(figsize=(14, 6))
-    sns.set_style("whitegrid")
-
-    if by_company:
-        sns.lineplot(
-            data=data_grouped, x="fecha", y="is_cancelled",
-            hue="empresa", palette=fixed_colors, marker="o"
-        )
-        plt.title(f"Cancellations by Company{title_extra}")
-    else:
-        sns.lineplot(
-            data=data_grouped, x="fecha", y="is_cancelled",
-            color=color, marker="o"
-        )
-        plt.title(f"Total Cancellations Evolution{title_extra}")
-
-    plt.ylabel("Number of Cancellations")
-    plt.xlabel("Date")
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.show()
-
-def plot_cancellations_heatmap(df: pd.DataFrame, ordered_months: list = None, ordered_days: list = None) -> None:
-    """
-    Heatmap of cancellation rate by month and day of week.
-
-    Parameters
-    ----------
-    df             : DataFrame with 'fecha' and 'is_cancelled'.
-    ordered_months : List of month names defining row order.
-    ordered_days   : List of day names defining column order.
-    """
-    df_heat = df.copy()
-    df_heat["Month"]      = df_heat["fecha"].dt.month_name()
-    df_heat["Day_of_Week"] = df_heat["fecha"].dt.day_name()
-
-    pivot = df_heat.pivot_table(values="is_cancelled", index="Month", columns="Day_of_Week", aggfunc="mean")
-
-    if ordered_months:
-        pivot = pivot.reindex(index=ordered_months)
-    if ordered_days:
-        pivot = pivot.reindex(columns=ordered_days)
-
-    plt.figure(figsize=(12, 8))
-    sns.heatmap(pivot, annot=True, cmap="YlOrRd", fmt=".2f", linewidths=0.5)
-    plt.title("Heatmap: Cancellation Rate by Month and Day", fontsize=15)
-    plt.xlabel("Day of the Week")
-    plt.ylabel("Month")
-    plt.show()
