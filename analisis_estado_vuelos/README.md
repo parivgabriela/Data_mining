@@ -32,7 +32,7 @@ In this stage, raw data is processed. Key features are extracted from the "Depar
 * Pandas
 * RegEx (Regular Expressions)
 
-### 3. [EDA Report](notebooks/03_EDA_reporte.ipynb)
+### 3. [EDA Report](notebooks/03_EDA_report.ipynb)
 Exploratory analysis to uncover patterns, seasonal trends, and comparative performance between both carriers.
 
 **Tech Stack:**
